@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="title has-text-link-dark">PTO Tracker</h1>
+<div class="box">
+  <table class="table is-fullwidth is-hoverable is-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Total PTO</th>
+        <th>PTO Used</th>
+        <th>PTO Remaining</th>
+        <th>Request PTO</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Jane Smith</td>
+        <td>120 hrs</td>
+        <td>40 hrs</td>
+        <td>80 hrs</td>
+        <td><button class="button is-small is-success is-light">Request</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="title has-text-link-dark">Welcome to Data Manifestation</h1>
+<p class="subtitle is-5 mb-5">Here's a quick overview of today, {{ today_date }}:</p>
+
+<div class="columns">
+  <div class="column is-half">
+    <div class="box">
+      <h2 class="title is-6">Scheduled Employees Today</h2>
+      <ul>
+        <li>John Doe — 3rd Shift</li>
+        <li>Jane Smith — 1st Shift</li>
+        <li>Michael Lee — 2nd Shift</li>
+      </ul>
+    </div>
+  </div>
+  <div class="column is-half">
+    <div class="box">
+      <h2 class="title is-6">Quick Stats</h2>
+      <p><strong>Employees On Duty:</strong> 12</p>
+      <p><strong>Total Strikes Issued:</strong> 3</p>
+    </div>
+  </div>
+</div>
+
+<div class="notification is-info is-light">
+  <p><strong>Reminder:</strong> Meow Meow Meow Meow Meow Meow Meow Meow Meow Meow</p>
+</div>
+{% endblock %}

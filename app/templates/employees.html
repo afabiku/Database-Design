@@ -40,17 +40,20 @@
         </tr>
       </thead>
       <tbody>
+        {% for emp in employees %}
         <tr>
-          <td>John Doe</td>
-          <td>Manufacturing</td>
-          <td>Night</td>
-          <td>$52,000</td>
-          <td>12 hrs</td>
-          <td>1</td>
-          <td>Forklift</td>
-          <td>Full-Time</td>
+          <td>{{ emp.name }}</td>
+          <td>{{ emp.department }}</td>
+          <td>{{ emp.shift }}</td>
+          <td>{{ emp.salary }}</td>
+          <td>{{ emp.pto_used }}</td>
+          <td>{{ emp.strikes }}</td>
+          <td>{{ emp.certifications }}</td>
+          <td>{{ emp.status }}</td>
         </tr>
+        {% endfor %}
       </tbody>
+      
     </table>
   </div>
 </div>

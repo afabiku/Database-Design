@@ -15,7 +15,7 @@ body {
     min-width: 180px;
   }
   
-  .button.is-info, .button.is-link {
+  .button.is-info, .button.is-link, .button.is-success {
     transition: background-color 0.3s ease;
   }
   
@@ -28,4 +28,3 @@ body {
     border-radius: 12px;
     transition: box-shadow 0.3s ease;
   }
-  
