@@ -9,8 +9,8 @@ A Flask-based web app to manage employee data, PTO requests, and scheduling for 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/yourrepo.git
-cd yourrepo
+git clone https://github.com/afabiku/Database-Design.git
+cd Database-Design
 ```
 
 ### 2. Set Up Virtual Environment
