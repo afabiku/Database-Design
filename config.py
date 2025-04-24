@@ -1,12 +1,4 @@
-import os
-
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY", "dev")
-    DEBUG = False
-
-class DevelopmentConfig(Config):
-    DEBUG = True
-
-config_by_name = {
-    "dev": DevelopmentConfig
-}
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///employee.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = 'your-secret-key'  # Needed for forms and CSRF protection

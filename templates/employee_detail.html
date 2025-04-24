@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Employee Detail{% endblock %}
+{% block content %}
+<h2>{{ employee.FirstName }} {{ employee.LastName }}</h2>
+<p><strong>Employee ID:</strong> {{ employee.EmployeeID }}</p>
+<p><strong>Status:</strong> {{ employee.Status }}</p>
+<p><strong>Department:</strong> {{ employee.department.DepartmentName if employee.department }}</p>
+<p><strong>Shift:</strong> {{ employee.shift.Name if employee.shift }}</p>
+<p><strong>PTO Remaining:</strong> {{ employee.PTORemaining }} hours</p>
+<p><strong>PTO Used:</strong> {{ employee.PTOUsed }} hours</p>
+
+<hr>
+<h4>Manage PTO</h4>
+<form method="POST">
+    {{ pto_form.hidden_tag() }}
+    {{ pto_form.amount.label }} {{ pto_form.amount(class="form-control mb-2") }}
+    {{ pto_form.submit_add(class="btn btn-outline-primary") }}
+    {{ pto_form.submit_use(class="btn btn-outline-warning") }}
+</form>
+
+<hr>
+<h4>Grant Certification</h4>
+<form method="POST">
+    {{ cert_form.hidden_tag() }}
+    {{ cert_form.CertificationID.label }} {{ cert_form.CertificationID(class="form-control mb-2") }}
+    {{ cert_form.DateObtained.label }} {{ cert_form.DateObtained(class="form-control mb-2") }}
+    {{ cert_form.submit(class="btn btn-outline-success") }}
+</form>
+
+<hr>
+<h4>Add Disciplinary Action</h4>
+<form method="POST">
+    {{ action_form.hidden_tag() }}
+    {{ action_form.ActionType.label }} {{ action_form.ActionType(class="form-control mb-2") }}
+    {{ action_form.ActionDate.label }} {{ action_form.ActionDate(class="form-control mb-2") }}
+    {{ action_form.Description.label }} {{ action_form.Description(class="form-control mb-2") }}
+    {{ action_form.submit(class="btn btn-outline-danger") }}
+</form>
+
+<hr>
+<h4>Change Shift</h4>
+<form method="POST">
+    {{ shift_form.hidden_tag() }}
+    {{ shift_form.ShiftID.label }} {{ shift_form.ShiftID(class="form-control mb-2") }}
+    {{ shift_form.submit(class="btn btn-outline-dark") }}
+</form>
+
+<hr>
+<h4>Certifications</h4>
+<ul>
+    {% for cert in employee.certifications %}
+        <li>{{ cert.certification.CertificationName }} ({{ cert.DateObtained }})</li>
+    {% endfor %}
+</ul>
+
+<h4>Disciplinary Actions</h4>
+<ul>
+    {% for action in employee.actions %}
+        <li>{{ action.ActionType }} on {{ action.ActionDate }} - {{ action.Description }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
