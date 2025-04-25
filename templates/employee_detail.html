@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}Employee Detail{% endblock %}
 {% block content %}
-<h2>{{ employee.FirstName }} {{ employee.LastName }}</h2>
-<p><strong>Employee ID:</strong> {{ employee.EmployeeID }}</p>
-<p><strong>Status:</strong> {{ employee.Status }}</p>
-<p><strong>Department:</strong> {{ employee.department.DepartmentName if employee.department }}</p>
-<p><strong>Shift:</strong> {{ employee.shift.Name if employee.shift }}</p>
-<p><strong>PTO Remaining:</strong> {{ employee.PTORemaining }} hours</p>
-<p><strong>PTO Used:</strong> {{ employee.PTOUsed }} hours</p>
+<h2>{{ employee.firstname }} {{ employee.lastname }}</h2>
+<p><strong>Employee ID:</strong> {{ employee.employeeid }}</p>
+<p><strong>Status:</strong> {{ employee.status }}</p>
+<p><strong>Department:</strong> {{ employee.department.departmentname if employee.department }}</p>
+<p><strong>Shift:</strong> {{ employee.shift.name if employee.shift }}</p>
+<p><strong>PTO Remaining:</strong> {{ employee.ptoremaining }} hours</p>
+<p><strong>PTO Used:</strong> {{ employee.ptoused }} hours</p>
 
 <hr>
 <h4>Manage PTO</h4>
@@ -49,14 +49,14 @@
 <h4>Certifications</h4>
 <ul>
     {% for cert in employee.certifications %}
-        <li>{{ cert.certification.CertificationName }} ({{ cert.DateObtained }})</li>
+        <li>{{ cert.certification.certificationname }} ({{ cert.dateobtained }})</li>
     {% endfor %}
 </ul>
 
 <h4>Disciplinary Actions</h4>
 <ul>
     {% for action in employee.actions %}
-        <li>{{ action.ActionType }} on {{ action.ActionDate }} - {{ action.Description }}</li>
+        <li>{{ action.actiontype }} on {{ action.actiondate }} - {{ action.description }}</li>
     {% endfor %}
 </ul>
 

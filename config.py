@@ -1,4 +1,4 @@
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///employee.db'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://ksu:1234@db.achelsto.com:5432/employees?sslmode=require'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = 'your-secret-key'  # Needed for forms and CSRF protection
+    SECRET_KEY = 'your-secret-key'

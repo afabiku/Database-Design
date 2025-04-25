@@ -7,17 +7,26 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
+from flask import request  # Make sure you have this
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = SearchForm()
-    employees = []
+
+    # Pagination setup
+    page = request.args.get('page', 1, type=int)
+    per_page = 20
+
     if form.validate_on_submit():
         query = form.query.data
         employees = Employee.query.filter(
-            (Employee.FirstName.ilike(f'%{query}%')) |
-            (Employee.LastName.ilike(f'%{query}%')) |
-            (Employee.EmployeeID.like(f'%{query}%'))
-        ).all()
+            (Employee.firstname.ilike(f'%{query}%')) |
+            (Employee.lastname.ilike(f'%{query}%')) |
+            (Employee.employeeid.cast(db.String).like(f'%{query}%'))
+        ).paginate(page=page, per_page=per_page)
+    else:
+        employees = Employee.query.paginate(page=page, per_page=per_page)
+
     return render_template('index.html', form=form, employees=employees)
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -25,22 +34,22 @@ def add_employee():
     form = NewEmployeeForm()
     if form.validate_on_submit():
         new_emp = Employee(
-            FirstName=form.FirstName.data,
-            LastName=form.LastName.data,
-            StartDate=form.StartDate.data,
-            Salary=form.Salary.data,
-            Status=form.Status.data,
-            DepartmentID=form.DepartmentID.data,
-            ShiftID=form.ShiftID.data,
-            YearsAtCompany=0,
-            Strikes=0,
-            PTOUsed=0,
-            PTORemaining=0,
-            HoursWorked=0
+            firstname=form.FirstName.data,
+            lastname=form.LastName.data,
+            startdate=form.StartDate.data,
+            salary=form.Salary.data,
+            status=form.Status.data,
+            departmentid=form.DepartmentID.data,
+            shiftid=form.ShiftID.data,
+            yearsatcompany=0,
+            strikes=0,
+            ptoused=0,
+            ptoremaining=0,
+            hoursworked=0
         )
         db.session.add(new_emp)
         db.session.commit()
-        return redirect(url_for('employee_detail', employee_id=new_emp.EmployeeID))
+        return redirect(url_for('employee_detail', employee_id=new_emp.employeeid))
     return render_template('add_employee.html', form=form)
 
 @app.route('/employee/<int:employee_id>', methods=['GET', 'POST'])
@@ -52,21 +61,21 @@ def employee_detail(employee_id):
     shift_form = ShiftForm()
 
     if pto_form.submit_add.data and pto_form.validate():
-        employee.PTORemaining += pto_form.amount.data
+        employee.ptoremaining += pto_form.amount.data
         db.session.commit()
         return redirect(url_for('employee_detail', employee_id=employee_id))
 
     if pto_form.submit_use.data and pto_form.validate():
-        employee.PTOUsed += pto_form.amount.data
-        employee.PTORemaining -= pto_form.amount.data
+        employee.ptoused += pto_form.amount.data
+        employee.ptoremaining -= pto_form.amount.data
         db.session.commit()
         return redirect(url_for('employee_detail', employee_id=employee_id))
 
     if cert_form.validate_on_submit():
         new_cert = EmployeeCertification(
-            EmployeeID=employee_id,
-            CertificationID=cert_form.CertificationID.data,
-            DateObtained=cert_form.DateObtained.data
+            employeeid=employee_id,
+            certificationid=cert_form.CertificationID.data,
+            dateobtained=cert_form.DateObtained.data
         )
         db.session.add(new_cert)
         db.session.commit()
@@ -74,17 +83,17 @@ def employee_detail(employee_id):
 
     if action_form.validate_on_submit():
         new_action = DisciplinaryAction(
-            EmployeeID=employee_id,
-            ActionType=action_form.ActionType.data,
-            ActionDate=action_form.ActionDate.data,
-            Description=action_form.Description.data
+            employeeid=employee_id,
+            actiontype=action_form.ActionType.data,
+            actiondate=action_form.ActionDate.data,
+            description=action_form.Description.data
         )
         db.session.add(new_action)
         db.session.commit()
         return redirect(url_for('employee_detail', employee_id=employee_id))
 
     if shift_form.validate_on_submit():
-        employee.ShiftID = shift_form.ShiftID.data
+        employee.shiftid = shift_form.ShiftID.data
         db.session.commit()
         return redirect(url_for('employee_detail', employee_id=employee_id))
 
@@ -96,7 +105,6 @@ def employee_detail(employee_id):
 def init_db():
     db.create_all()
     return "Database initialized!"
-
 
 if __name__ == '__main__':
     with app.app_context():
