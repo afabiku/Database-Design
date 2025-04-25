@@ -42,14 +42,15 @@
       <tbody>
         {% for emp in employees %}
         <tr>
-          <td>{{ emp.name }}</td>
-          <td>{{ emp.department }}</td>
-          <td>{{ emp.shift }}</td>
-          <td>{{ emp.salary }}</td>
-          <td>{{ emp.pto_used }}</td>
-          <td>{{ emp.strikes }}</td>
-          <td>{{ emp.certifications }}</td>
-          <td>{{ emp.status }}</td>
+          <td>{{ emp.FirstName }} {{ emp.LastName }}</td>
+          <td>{{ emp.DepartmentID }}</td>
+          <td>{{ emp.ShiftID }}</td>
+          <td>{{ emp.Salary }}</td>
+          <td>{{ emp.PTOUsed }} hrs</td>
+          <td>{{ emp.Strikes }}</td>
+          <td>–</td> {# will be added later #}
+          <td>{{ emp.Status }}</td>
+
         </tr>
         {% endfor %}
       </tbody>
