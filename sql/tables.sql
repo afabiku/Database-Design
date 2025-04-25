@@ -1,15 +1,15 @@
--- Drop tables if they exist
+-- Drop tables if they exist (in correct order to respect dependencies)
 DROP TABLE IF EXISTS employeeCertification, disciplinaryAction, employee, certification, shift, department;
 
 -- Department
 CREATE TABLE department (
-    DepartmentID INT PRIMARY KEY AUTO_INCREMENT,
+    DepartmentID SERIAL PRIMARY KEY,
     DepartmentName VARCHAR(100)
 );
 
 -- Shift
 CREATE TABLE shift (
-    ShiftID INT PRIMARY KEY AUTO_INCREMENT,
+    ShiftID SERIAL PRIMARY KEY,
     Name VARCHAR(50),
     start_time TIME,
     end_time TIME,
@@ -18,38 +18,35 @@ CREATE TABLE shift (
 
 -- Certification
 CREATE TABLE certification (
-    CertificationID INT PRIMARY KEY AUTO_INCREMENT,
+    CertificationID SERIAL PRIMARY KEY,
     CertificationName VARCHAR(100),
     Description TEXT
 );
 
 -- Employee
 CREATE TABLE employee (
-    EmployeeID INT PRIMARY KEY AUTO_INCREMENT,
+    EmployeeID SERIAL PRIMARY KEY,
     FirstName VARCHAR(50),
     LastName VARCHAR(50),
     StartDate DATE,
-    Salary DECIMAL(10,2),
-    Status ENUM('Full-Time', 'Part-Time'),
+    Salary NUMERIC(10,2),
+    Status VARCHAR(20) CHECK (Status IN ('Full-Time', 'Part-Time')),
     YearsAtCompany INT,
     Strikes INT,
     PTOUsed INT,
     PTORemaining INT,
-    HoursWorked DECIMAL(5,2),
-    DepartmentID INT,
-    ShiftID INT,
-    FOREIGN KEY (DepartmentID) REFERENCES department(DepartmentID),
-    FOREIGN KEY (ShiftID) REFERENCES shift(ShiftID)
+    HoursWorked NUMERIC(5,2),
+    DepartmentID INT REFERENCES department(DepartmentID),
+    ShiftID INT REFERENCES shift(ShiftID)
 );
 
 -- Disciplinary Action
 CREATE TABLE disciplinaryAction (
-    ActionID INT PRIMARY KEY AUTO_INCREMENT,
-    EmployeeID INT,
+    ActionID SERIAL PRIMARY KEY,
+    EmployeeID INT REFERENCES employee(EmployeeID),
     ActionType VARCHAR(100),
     ActionDate DATE,
-    Description TEXT,
-    FOREIGN KEY (EmployeeID) REFERENCES employee(EmployeeID)
+    Description TEXT
 );
 
 -- Employee Certifications
