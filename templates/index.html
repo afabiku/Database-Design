@@ -4,11 +4,29 @@
 <h2>Search Employees</h2>
 <form method="POST">
     {{ form.hidden_tag() }}
+
     <div class="mb-3">
         {{ form.query.label }} {{ form.query(class="form-control") }}
     </div>
+
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            {{ form.certification.label }} {{ form.certification(class="form-control") }}
+        </div>
+        <div class="col-md-3 mb-3">
+            {{ form.department.label }} {{ form.department(class="form-control") }}
+        </div>
+        <div class="col-md-3 mb-3">
+            {{ form.status.label }} {{ form.status(class="form-control") }}
+        </div>
+        <div class="col-md-3 mb-3">
+            {{ form.shift.label }} {{ form.shift(class="form-control") }}
+        </div>
+    </div>
+
     {{ form.submit(class="btn btn-primary") }}
 </form>
+
 
 {% if employees.items %}
     <h3 class="mt-4">Results</h3>

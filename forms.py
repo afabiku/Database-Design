@@ -1,18 +1,26 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DecimalField, IntegerField, SelectField, DateField, SubmitField, TimeField, TextAreaField
+from wtforms import StringField, SubmitField, SelectField, IntegerField, DecimalField, DateField, TextAreaField
 from wtforms.validators import DataRequired, Optional
-
-from flask_wtf import FlaskForm
-from wtforms import SubmitField, SelectField, IntegerField, DateField
-from wtforms.validators import DataRequired
-from models import Certification, Shift
-
+from wtforms.validators import Optional
+from models import Certification, Department, Shift
 
 class SearchForm(FlaskForm):
-    query = StringField('Search by Name or ID', validators=[DataRequired()])
+    query = StringField('Name or ID', validators=[Optional()])
+    certification = SelectField('Certification', coerce=int, choices=[], validators=[Optional()])
+    department = SelectField('Department', coerce=int, choices=[], validators=[Optional()])
+    status = SelectField('Status', choices=[
+        ('', 'Any'), 
+        ('Full-Time', 'Full-Time'), 
+        ('Part-Time', 'Part-Time')
+    ], validators=[Optional()])
+    shift = SelectField('Shift', coerce=int, choices=[], validators=[Optional()])
     submit = SubmitField('Search')
 
-from models import Department, Shift
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        self.certification.choices = [(0, 'Any')] + [(c.certificationid, c.certificationname) for c in Certification.query.all()]
+        self.department.choices = [(0, 'Any')] + [(d.departmentid, d.departmentname) for d in Department.query.all()]
+        self.shift.choices = [(0, 'Any')] + [(s.shiftid, s.name) for s in Shift.query.all()]
 
 class NewEmployeeForm(FlaskForm):
     FirstName = StringField('First Name', validators=[DataRequired()])

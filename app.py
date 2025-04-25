@@ -2,32 +2,49 @@ from flask import Flask, render_template, redirect, url_for, request
 from models import db, Employee, Department, Shift, Certification, EmployeeCertification, DisciplinaryAction
 from forms import SearchForm, NewEmployeeForm, PTOForm, CertificationForm, ActionForm, ShiftForm
 from config import Config
+from flask import request
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
-from flask import request  # Make sure you have this
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = SearchForm()
 
-    # Pagination setup
     page = request.args.get('page', 1, type=int)
     per_page = 20
 
+    employees_query = Employee.query
+
     if form.validate_on_submit():
         query = form.query.data
-        employees = Employee.query.filter(
-            (Employee.firstname.ilike(f'%{query}%')) |
-            (Employee.lastname.ilike(f'%{query}%')) |
-            (Employee.employeeid.cast(db.String).like(f'%{query}%'))
-        ).paginate(page=page, per_page=per_page)
-    else:
-        employees = Employee.query.paginate(page=page, per_page=per_page)
+        if query:
+            employees_query = employees_query.filter(
+                (Employee.firstname.ilike(f'%{query}%')) |
+                (Employee.lastname.ilike(f'%{query}%')) |
+                (Employee.employeeid.cast(db.String).like(f'%{query}%'))
+            )
+        if form.department.data and form.department.data != 0:
+            employees_query = employees_query.filter(Employee.departmentid == form.department.data)
+
+        if form.status.data:
+            employees_query = employees_query.filter(Employee.status == form.status.data)
+
+        if form.shift.data and form.shift.data != 0:
+            employees_query = employees_query.filter(Employee.shiftid == form.shift.data)
+
+        if form.certification.data and form.certification.data != 0:
+            employees_query = employees_query.join(EmployeeCertification).filter(
+                EmployeeCertification.certificationid == form.certification.data
+            )
+
+        
+
+    employees = employees_query.paginate(page=page, per_page=per_page)
 
     return render_template('index.html', form=form, employees=employees)
+
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_employee():
