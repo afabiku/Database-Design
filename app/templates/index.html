@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Search{% endblock %}
+{% block content %}
+<h2>Search Employees</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+        {{ form.query.label }} {{ form.query(class="form-control") }}
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            {{ form.certification.label }} {{ form.certification(class="form-control") }}
+        </div>
+        <div class="col-md-3 mb-3">
+            {{ form.department.label }} {{ form.department(class="form-control") }}
+        </div>
+        <div class="col-md-3 mb-3">
+            {{ form.status.label }} {{ form.status(class="form-control") }}
+        </div>
+        <div class="col-md-3 mb-3">
+            {{ form.shift.label }} {{ form.shift(class="form-control") }}
+        </div>
+    </div>
+
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+
+
+{% if employees.items %}
+    <h3 class="mt-4">Results</h3>
+    <ul class="list-group">
+        {% for emp in employees.items %}
+            <li class="list-group-item">
+                <a href="{{ url_for('detail.index', employee_id=emp.employeeid) }}">
+                    {{ emp.firstname }} {{ emp.lastname }} (ID: {{ emp.employeeid }})
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Pagination Controls -->
+    <nav class="mt-4">
+        <ul class="pagination">
+            {% if employees.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('index.index', page=employees.prev_num) }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                </li>
+            {% endif %}
+            
+            <li class="page-item disabled">
+                <span class="page-link">
+                    Page {{ employees.page }} of {{ employees.pages }}
+                </span>
+            </li>
+
+            {% if employees.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('index.index', page=employees.next_num) }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Next</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% else %}
+    <p class="mt-4">No employees found.</p>
+{% endif %}
+{% endblock %}
