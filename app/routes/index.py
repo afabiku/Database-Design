@@ -36,6 +36,8 @@ def index():
                 EmployeeCertification.certificationid == form.certification.data
             )
     
-    employees = employees_query.paginate(page=page, per_page=per_page)
+        employees_query = employees_query.order_by(Employee.employeeid)
+        employees = employees_query.paginate(page=page, per_page=per_page)
+
 
     return render_template('index.html', form=form, employees=employees)
